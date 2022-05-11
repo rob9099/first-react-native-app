@@ -13,18 +13,33 @@ const ToDoInput = props => {
     const newToDoHandler = (enteredText) => {
     setNewToDo(enteredText);
     }
+
+    const addToDoHandler = () => {
+      props.onAddToDoHandler(newToDo);
+      setNewToDo('');
+    }
     
 
   return (
     <Modal visible={props.visible} animationType='slide'>
-      <View style={styles.inputcontainer}>
+      <View style={styles.inputContainer}>
         <TextInput
             placeholder="Att göra"
             style={styles.textInput}
             onChangeText={newToDoHandler}
             value={newToDo}
           />
-        <Button title="lägg till" onPress={() => props.onAddToDoHandler(newToDo)}/>
+        <View style={styles.buttonContainer}>
+          <View style={styles.button}>
+            <Button title="lägg till" onPress={addToDoHandler}/>
+          </View>
+          <View style={styles.button}>
+            <Button title='rensa' color='#E7E214' onPress={() => setNewToDo('')}/>
+          </View>
+          <View style={styles.button}>
+            <Button title='avbryt' color='#b40000' onPress={props.onCancel}/>
+          </View>
+        </View>
       </View>
     </Modal>
   )
@@ -35,17 +50,26 @@ const ToDoInput = props => {
 
 
 const styles = StyleSheet.create({
-    inputcontainer: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      },
-      textInput: {
-        width: "60%",
-        borderBottomColor: "black",
-        borderBottomWidth: 1,
-        padding: 5,
-      }
+    inputContainer: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    textInput: {
+      width: "80%",
+      borderBottomColor: "black",
+      borderBottomWidth: 1,
+      padding: 5,
+      marginBottom: 10
+    },
+    buttonContainer: {
+      flexDirection: 'row',
+      width: '70%',
+      justifyContent: 'space-between'
+    },
+    button: {
+      width: '30%'
+    }
   });
 
 export default ToDoInput

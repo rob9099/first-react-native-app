@@ -14,7 +14,7 @@ export default function App() {
 
   const addToDoHandler = toDoItemProps => {
     setToDoList(currentArray => [...currentArray, {key: Math.random().toString(), value: toDoItemProps}]);
-    setStartButton(false)
+    setStartButton(false);
   }
 
 
@@ -24,13 +24,17 @@ export default function App() {
     })
   }
 
+  const cancelButtonHandler = () => {
+    setStartButton(false);
+  }
+
 
 
   
   return (
     <View style={styles.screen}>
       <Button title='Tryck här för att lägga till!' onPress={() => setStartButton(true)}/>
-      <ToDoInput visible={startButton} onAddToDoHandler={addToDoHandler}/>
+      <ToDoInput visible={startButton} onAddToDoHandler={addToDoHandler} onCancel={cancelButtonHandler}/>
       <FlatList data={toDoList} renderItem={toDo => <ToDoItems title={toDo.item} onDelete={deleteToDoItemHandler}/>}/>
     </View>
   );
