@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import {View, TextInput, StyleSheet, Button} from 'react-native'
+import {View, TextInput, StyleSheet, Button, Modal} from 'react-native'
 
 
 
@@ -11,20 +11,22 @@ const ToDoInput = props => {
     
 
     const newToDoHandler = (enteredText) => {
-    setNewToDo(enteredText)
+    setNewToDo(enteredText);
     }
     
 
   return (
-    <View style={styles.inputcontainer}>
-      <TextInput
-          placeholder="Att göra"
-          style={styles.textInput}
-          onChangeText={newToDoHandler}
-          value={newToDo}
-        />
-      <Button title="Lägg till" onPress={() => props.onAddToDoHandler(newToDo)}/>
-    </View>
+    <Modal visible={props.visible} animationType='slide'>
+      <View style={styles.inputcontainer}>
+        <TextInput
+            placeholder="Att göra"
+            style={styles.textInput}
+            onChangeText={newToDoHandler}
+            value={newToDo}
+          />
+        <Button title="lägg till" onPress={() => props.onAddToDoHandler(newToDo)}/>
+      </View>
+    </Modal>
   )
 }
 
@@ -34,8 +36,8 @@ const ToDoInput = props => {
 
 const styles = StyleSheet.create({
     inputcontainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
+        flex: 1,
+        justifyContent: "center",
         alignItems: "center",
       },
       textInput: {
