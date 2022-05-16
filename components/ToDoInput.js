@@ -15,8 +15,12 @@ const ToDoInput = props => {
     }
 
     const addToDoHandler = () => {
-      props.onAddToDoHandler(newToDo);
-      setNewToDo('');
+      if(newToDo.length === 0){
+        return;
+      }else{
+        props.onAddToDoHandler(newToDo);
+        setNewToDo('');
+      }
     }
     
 
@@ -31,13 +35,13 @@ const ToDoInput = props => {
           />
         <View style={styles.buttonContainer}>
           <View style={styles.button}>
-            <Button title="lägg till" onPress={addToDoHandler}/>
+            <Button title='avbryt' color='#b40000' onPress={props.onCancel}/>
           </View>
           <View style={styles.button}>
             <Button title='rensa' color='#E7E214' onPress={() => setNewToDo('')}/>
           </View>
           <View style={styles.button}>
-            <Button title='avbryt' color='#b40000' onPress={props.onCancel}/>
+            <Button title="lägg till" onPress={addToDoHandler}/>
           </View>
         </View>
       </View>
