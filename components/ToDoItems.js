@@ -16,7 +16,13 @@ const ToDoItems = props => {
   
   
   return (
-    <TouchableOpacity onPress={() => props.onTransferToInProgress(props.title)}>
+    <TouchableOpacity onPress={() => {
+      if(props.category == 'transferToInProgress'){
+        props.onTransferToInProgress(props.title)
+      }else{
+        props.onTransferToDone(props.title)
+      }
+      }}>
       <View style={styles.listItemContainer}>
         <View style={styles.listItem}>
             <Text>{props.title.value}</Text>

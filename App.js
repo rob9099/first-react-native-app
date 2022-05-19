@@ -59,17 +59,23 @@ export default function App() {
     <View style={styles.screen}>
       <Button title='Tryck här för att lägga till!' onPress={() => setStartButton(true)}/>
       <ToDoInput visible={startButton} onAddToDoHandler={addToDoHandler} onCancel={cancelButtonHandler}/>
-      <Text style={styles.title}>Att göra</Text>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>Att göra</Text>
+      </View>
       <FlatList data={toDoList} renderItem={toDoItem => <ToDoItems title={toDoItem.item} category='transferToInProgress' onDelete={deleteToDoItemHandler} onTransferToInProgress={ props => {
         transferToInProgress(props);
         deleteToDoItemHandler(props.key);
         }}/>}/>
-      <Text style={styles.title}>Pågående</Text>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>Pågående</Text>
+      </View>
       <FlatList data={inProgressList} renderItem={inProgressItem => <ToDoItems title={inProgressItem.item} category='transferToDone' onDelete={deleteToDoItemHandler} onTransferToDone={ props => {
         transferToDone(props);
         deleteToDoItemHandler(props.key);
         }}/>}/>
-      <Text style={styles.title}>Klart</Text>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>Klart</Text>
+      </View>
       <FlatList data={doneList} renderItem={inProgressItem => <ToDoItems title={inProgressItem.item} onDelete={deleteToDoItemHandler}/>}/>
     </View>
   );
@@ -80,9 +86,17 @@ export default function App() {
 
 const styles = StyleSheet.create({
   screen: {
-    padding: 50,
+    padding: 50
+  },
+  titleContainer: {
+    shadowColor: 'black',
+    shadowOffset: {width: 0, height: 2},
+    shadowRadius: 80,
+    shadowOpacity: 0.5,
+    elevation: 10,
   },
   title: {
-    textAlign: 'center'
+    textAlign: 'center',
+    marginVertical: 10
   }
 });

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import {View, TextInput, StyleSheet, Button, Modal} from 'react-native'
+import {View, TextInput, StyleSheet, Button, Modal, TouchableWithoutFeedback, Keyboard, Text, Alert} from 'react-native'
 
 
 
@@ -8,43 +8,72 @@ import {View, TextInput, StyleSheet, Button, Modal} from 'react-native'
 const ToDoInput = props => {
 
     const [newToDo, setNewToDo] = useState('');
-    
+    const [errorSpecialCharacters, seterrorSpecialCharacters] = useState(false)
+    const [errorEmptyInput, seterrorEmptyInput] = useState(false)
 
+
+    let errorMessage;
     const newToDoHandler = (enteredText) => {
-    setNewToDo(enteredText);
-    }
+      if(enteredText.match(/[|\\/~^:,;?!&%$@*+]/)){
+        seterrorSpecialCharacters(true);
+      }else{
+        setNewToDo(enteredText);
+      };
+    };
+
 
     const addToDoHandler = () => {
       if(newToDo.length === 0){
-        return;
+        seterrorEmptyInput(true);
       }else{
         props.onAddToDoHandler(newToDo);
         setNewToDo('');
-      }
-    }
+        seterrorSpecialCharacters(false);
+        seterrorEmptyInput(false);
+      };
+    };
+    
+
+    if(errorSpecialCharacters){
+      Alert.alert('Specialteckenfel', 'Tyvärr, inga specialtecken tillåtna!', [{text: 'Okej', style: 'destructive', onPress: seterrorSpecialCharacters(false)}]);
+    }else if(errorEmptyInput){
+      errorMessage = <Text>Kan inte lägga in tom uppgift!</Text>;
+    };
     
 
   return (
     <Modal visible={props.visible} animationType='slide'>
-      <View style={styles.inputContainer}>
-        <TextInput
-            placeholder="Att göra"
-            style={styles.textInput}
-            onChangeText={newToDoHandler}
-            value={newToDo}
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <View style={styles.inputContainer}>
+          <TextInput
+              placeholder="Att göra"
+              style={styles.textInput}
+              onChangeText={newToDoHandler}
+              value={newToDo}
           />
-        <View style={styles.buttonContainer}>
-          <View style={styles.button}>
-            <Button title='avbryt' color='#b40000' onPress={props.onCancel}/>
-          </View>
-          <View style={styles.button}>
-            <Button title='rensa' color='#E7E214' onPress={() => setNewToDo('')}/>
-          </View>
-          <View style={styles.button}>
-            <Button title="lägg till" onPress={addToDoHandler}/>
+          {errorMessage}
+          <View style={styles.buttonContainer}>
+            <View style={styles.button}>
+              <Button title='avbryt' color='#b40000' onPress={() => {
+                props.onCancel();
+                setNewToDo('');
+                seterrorSpecialCharacters(false)
+                seterrorEmptyInput(false)
+                }}/>
+            </View>
+            <View style={styles.button}>
+              <Button title='rensa' color='#E7E214' onPress={() => {
+                setNewToDo('')
+                seterrorSpecialCharacters(false)
+                seterrorEmptyInput(false)
+                }}/>
+            </View>
+            <View style={styles.button}>
+              <Button title="lägg till" onPress={addToDoHandler}/>
+            </View>
           </View>
         </View>
-      </View>
+      </TouchableWithoutFeedback>
     </Modal>
   )
 }
