@@ -12,23 +12,21 @@ const ToDoItems = props => {
     setItemCategory(props.category);
   }, []);
   
-
-  
   
   return (
     <TouchableOpacity onPress={() => {
-      if(props.category == 'transferToInProgress'){
+      if(props.category == 'toDo'){
         props.onTransferToInProgress(props.title)
-      }else{
+      }else if(props.category == 'inProgress'){
         props.onTransferToDone(props.title)
       }
       }}>
       <View style={styles.listItemContainer}>
         <View style={styles.listItem}>
-            <Text>{props.title.value}</Text>
+            <Text>{props.title[itemCategory]}</Text>
         </View>
         <View style={styles.buttonContainer}>
-          <Button title='radera' color='#b40000' onPress={() => props.onDelete(props.title.key)}/>
+          <Button title='radera' color='#b40000' onPress={() => props.onDelete(props.title._id)}/>
         </View>
       </View>
     </TouchableOpacity>
