@@ -158,7 +158,17 @@ export default function App() {
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Att göra</Text>
       </View>
-      <FlatList data={toDoList} keyExtractor={(item, key) => item._id} renderItem={toDoItem => <ToDoItems title={toDoItem.item} onDelete={deleteToDoItemHandler} onTransferToInProgress={ props => { transferToInProgressHandler(props); }} />}/>
+      <FlatList data={toDoList} keyExtractor={(item, key) => item._id} renderItem={toDoItem => {
+        {console.log(toDoItem.item.category)}
+        if(toDoItem.item.category == 'toDo'){
+          <ToDoItems title={toDoItem.item}
+            onDelete={deleteToDoItemHandler}
+            onTransferToInProgress={ props => {
+              transferToInProgressHandler(props);
+            }}
+        />
+        }
+      }}/>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Pågående</Text>
       </View>
