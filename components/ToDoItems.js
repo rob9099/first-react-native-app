@@ -23,7 +23,7 @@ const ToDoItems = props => {
       }}>
       <View style={styles.listItemContainer}>
         <View style={styles.listItem}>
-            <Text>{props.title[itemCategory]}</Text>
+            <Text>{props.title.value}</Text>
         </View>
         <View style={styles.buttonContainer}>
           <Button title='radera' color='#b40000' onPress={() => props.onDelete(props.title._id)}/>

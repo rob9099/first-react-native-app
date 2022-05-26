@@ -14,7 +14,6 @@ mongoose.connect(process.env.DATABASE_ACCESS, () => console.log('Database connec
 
 
 
-
 index.use(express.json())
 index.use(cors())
 index.use('/', routes);
