@@ -28,7 +28,7 @@ const ToDoInput = props => {
       if(newToDo.length === 0){
         seterrorEmptyInput(true);
       }else{
-        props.onAddToDoHandler(newToDo);
+        props.onAddNewToDoHandler(newToDo);
         setNewToDo('');
         seterrorSpecialCharacters(false);
         seterrorEmptyInput(false);

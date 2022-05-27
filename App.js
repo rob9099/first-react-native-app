@@ -17,9 +17,6 @@ export default function App() {
   const [doneList, setDoneList] = useState([]);
   const [addButton, setaddButton] = useState(false);
   const [searchQuery, setsearchQuery] = useState('');
-
-  
-
   
 
   const getToDoItems = () => {
@@ -27,8 +24,15 @@ export default function App() {
     fetch("http://192.168.1.42:5000/getToDoItems")
       .then(response => response.json())
       .then((responseJson) => {
-        console.log(responseJson)
-        setToDoList(responseJson)
+        responseJson.map((item) => {
+          if(item.category == 'toDo'){
+            setToDoList(currentArray => [...currentArray, item])
+          }else if(item.category == 'inProgress'){
+            setInProgressList(currentArray => [...currentArray, item])
+          }else{
+            setDoneList(currentArray => [...currentArray, item])
+          }
+        })
       })
       .catch(error => {
         console.log(error)
@@ -37,10 +41,12 @@ export default function App() {
 
 
   
-  const addNewToDo = props => {
+  const addNewToDoHandler = props => {
+    setaddButton(false);
     axios.post('http://192.168.1.42:5000/newToDOv2', {value: props})
     .then (function (response){
       console.log(response)
+      setToDoList([]), setInProgressList([]), setDoneList([])
       getToDoItems()
     })
     .catch (function (error){
@@ -48,66 +54,14 @@ export default function App() {
     })
   }
 
-
-  const addNewInProgress = props => {
-    axios.post('http://192.168.1.42:5000/newInProgress', {inProgress: props.toDo})
-    .then (function (response){
-      console.log(response)
-    })
-    .catch (function (error){
-      console.log(error)
-    })
-  }
-
-
-  const addNewDone = props => {
-    axios.post('http://192.168.1.42:5000/newDone', {done: props.inProgress})
-    .then (function (response){
-      console.log(response)
-    })
-    .catch (function (error){
-      console.log(error)
-    })
-  }
-
-
-  const addToDoHandler = toDoItemProps => {
-    addNewToDo(toDoItemProps)
-    setaddButton(false);
-  };
 
 
   const deleteToDoItemHandler = toDoKey => {
     axios.post('http://192.168.1.42:5000/deleteOneToDo', {_id: toDoKey})
     .then (function (response){
       console.log(response)
+      setToDoList([]), setInProgressList([]), setDoneList([])
       getToDoItems()
-      getInProgressItems();
-    })
-    .catch (function (error){
-      console.log(error)
-    })
-  }
-
-
-  const deleteInProgressItemHandler = toDoKey => {
-    axios.post('http://192.168.1.42:5000/deleteOneInProgress', {_id: toDoKey})
-    .then (function (response){
-      console.log(response)
-      getInProgressItems();
-      getDoneItems();
-    })
-    .catch (function (error){
-      console.log(error)
-    })
-  }
-
-
-  const deleteDoneItemHandler = toDoKey => {
-    axios.post('http://192.168.1.42:5000/deleteOneDone', {_id: toDoKey})
-    .then (function (response){
-      console.log(response)
-      getDoneItems();
     })
     .catch (function (error){
       console.log(error)
@@ -120,15 +74,24 @@ export default function App() {
   };
 
 
-  const transferToInProgressHandler = toDoItem => {
-    addNewInProgress(toDoItem);
-    deleteToDoItemHandler(toDoItem)
-  }
+  const transferCategoryHandler = toDoItem => {
+    
+    let category;
+    if(toDoItem.category == 'toDo'){
+      category = 'inProgress'
+    }else{
+      category = 'done'
+    }
 
-
-  const transferToDoneHandler = inProgressItem => {
-    addNewDone(inProgressItem);
-    deleteInProgressItemHandler(inProgressItem);
+    axios.patch('http://192.168.1.42:5000/changeCategory', {_id: toDoItem._id, category: category})
+    .then (function (response){
+      console.log(response)
+      setToDoList([]), setInProgressList([]), setDoneList([])
+      getToDoItems()
+    })
+    .catch (function (error){
+      console.log(error)
+    })
   }
 
 
@@ -154,21 +117,23 @@ export default function App() {
       <View style={styles.searchContainer}>
         <TextInput placeholder='sök...' style={styles.search}/>
       </View>
-      <ToDoInput visible={addButton} onAddToDoHandler={addToDoHandler} onCancel={cancelButtonHandler}/>
+      <ToDoInput visible={addButton} onAddNewToDoHandler={addNewToDoHandler} onCancel={cancelButtonHandler}/>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Att göra</Text>
       </View>
-      <FlatList data={toDoList} keyExtractor={(item, key) => item._id} renderItem={toDoItem => <ToDoItems title={toDoItem.item} onDelete={deleteToDoItemHandler} onTransferToInProgress={ props => { transferToInProgressHandler(props); }} />}/>
+      <FlatList data={toDoList} keyExtractor={(item, key) => item._id} renderItem={toDoItem => <ToDoItems title={toDoItem.item} onDelete={deleteToDoItemHandler} onTransferCategoryHandler={ props => {
+        transferCategoryHandler(props);
+        }} />}/>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Pågående</Text>
       </View>
-      <FlatList data={inProgressList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem => <ToDoItems title={inProgressItem.item} onDelete={deleteInProgressItemHandler} onTransferToDone={ props => {
-        transferToDoneHandler(props);
+      <FlatList data={inProgressList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem => <ToDoItems title={inProgressItem.item} onDelete={deleteToDoItemHandler} onTransferCategoryHandler={ props => {
+        transferCategoryHandler(props);
         }}/>}/>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Klart</Text>
       </View>
-      <FlatList data={doneList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem => <ToDoItems title={inProgressItem.item} onDelete={deleteDoneItemHandler}/>}/>
+      <FlatList data={doneList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem => <ToDoItems title={inProgressItem.item} onDelete={deleteToDoItemHandler}/>}/>
     </View>
   );
 }
@@ -237,6 +202,65 @@ const styles = StyleSheet.create({
       console.log(error)
     })
   }*/
+
+
+    /*const addNewInProgress = props => {
+    axios.post('http://192.168.1.42:5000/newInProgress', {inProgress: props.toDo})
+    .then (function (response){
+      console.log(response)
+    })
+    .catch (function (error){
+      console.log(error)
+    })
+  }*/
+
+
+  /*const addNewDone = props => {
+    axios.post('http://192.168.1.42:5000/newDone', {done: props.inProgress})
+    .then (function (response){
+      console.log(response)
+    })
+    .catch (function (error){
+      console.log(error)
+    })
+  }*/
+
+
+    /*const deleteInProgressItemHandler = toDoKey => {
+    axios.post('http://192.168.1.42:5000/deleteOneInProgress', {_id: toDoKey})
+    .then (function (response){
+      console.log(response)
+      getInProgressItems();
+      getDoneItems();
+    })
+    .catch (function (error){
+      console.log(error)
+    })
+  }*/
+
+
+  /*const deleteDoneItemHandler = toDoKey => {
+    axios.post('http://192.168.1.42:5000/deleteOneDone', {_id: toDoKey})
+    .then (function (response){
+      console.log(response)
+      getDoneItems();
+    })
+    .catch (function (error){
+      console.log(error)
+    })
+  }*/
+
+
+    /*const transferToDoneHandler = inProgressItem => {
+    addNewDone(inProgressItem);
+    deleteInProgressItemHandler(inProgressItem);
+  }*/
+
+
+
+
+
+
 
 
   /*const addToDoHandler = toDoItemProps => {

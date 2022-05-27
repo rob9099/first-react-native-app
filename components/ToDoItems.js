@@ -5,21 +5,14 @@ import {View, Text, StyleSheet, TouchableOpacity, Button} from 'react-native'
 
 const ToDoItems = props => {
   
-  const [itemCategory, setItemCategory] = useState('');
 
-
-  useEffect(() => {
-    setItemCategory(props.category);
-  }, []);
-  
-  
   return (
     <TouchableOpacity onPress={() => {
-      if(props.category == 'toDo'){
-        props.onTransferToInProgress(props.title)
-      }else if(props.category == 'inProgress'){
-        props.onTransferToDone(props.title)
-      }
+      if(props.title.category == 'toDo' || props.title.category == 'inProgress'){
+          props.onTransferCategoryHandler(props.title)
+        }else{
+          props.onDelete(props.title._id)
+        }
       }}>
       <View style={styles.listItemContainer}>
         <View style={styles.listItem}>
@@ -52,5 +45,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   }
   });
+
+
+
+  //const [itemCategory, setItemCategory] = useState('');
+
+    /*useEffect(() => {
+    setItemCategory(props.category);
+  }, []);*/
+
+  
 
 export default ToDoItems
