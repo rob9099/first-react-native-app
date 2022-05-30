@@ -143,15 +143,5 @@ export default function App() {
 const styles = StyleSheet.create({
   screen: {
     padding: 50
-  },
-  searchContainer: {
-    alignItems: "center"
-  },
-  search: {
-    width: '60%',
-    borderColor: 'red',
-    borderWidth: 1,
-    margin: 10,
-    paddingHorizontal: 5
   }
 });
