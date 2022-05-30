@@ -5,7 +5,6 @@ const toDoModel = require('./toDoSchema');
 
 
 
-
 router.get('/getToDoItems', (request, response) =>{
 
     toDoModel.find()

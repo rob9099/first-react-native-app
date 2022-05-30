@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Button, FlatList, Text, TouchableWithoutFeedback, Keyboard} from "react-native";
+import { StyleSheet, View, Button, FlatList, TouchableWithoutFeedback, Keyboard} from "react-native";
 import ToDoItems from "./components/ToDoItems";
 import ToDoInput from "./components/ToDoInput";
+import TitleHeader from "./components/CategoryHeader";
 import Search from "./components/Search";
 import axios from "axios";
 
@@ -121,21 +122,15 @@ export default function App() {
         <Button title='Tryck här för att lägga till!' onPress={() => setaddButton(true)}/>
         <Search onSearchHandler={searchHandler}/>
         <ToDoInput visible={addButton} onAddNewToDoHandler={addNewToDoHandler} onCancel={cancelButtonHandler}/>
-        <View style={styles.categoryHeaderContainer}>
-          <Text style={styles.categoryHeader}>Att göra</Text>
-        </View>
+        <TitleHeader>Att göra</TitleHeader>
         <FlatList data={toDoList} keyExtractor={(item, key) => item._id} renderItem={toDoItem => <ToDoItems title={toDoItem.item} onDelete={deleteToDoItemHandler} onTransferCategoryHandler={ props => {
           transferCategoryHandler(props);
           }} />}/>
-        <View style={styles.categoryHeaderContainer}>
-          <Text style={styles.categoryHeader}>Pågående</Text>
-        </View>
+        <TitleHeader>Pågående</TitleHeader>
         <FlatList data={inProgressList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem => <ToDoItems title={inProgressItem.item} onDelete={deleteToDoItemHandler} onTransferCategoryHandler={ props => {
           transferCategoryHandler(props);
           }}/>}/>
-        <View style={styles.categoryHeaderContainer}>
-          <Text style={styles.categoryHeader}>Klart</Text>
-        </View>
+        <TitleHeader>Klart</TitleHeader>
         <FlatList data={doneList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem => <ToDoItems title={inProgressItem.item} onDelete={deleteToDoItemHandler}/>}/>
       </View>
     
@@ -158,16 +153,5 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 10,
     paddingHorizontal: 5
-  },
-  categoryTitleContainer: {
-    shadowColor: 'black',
-    shadowOffset: {width: 0, height: 2},
-    shadowRadius: 50,
-    shadowOpacity: 0.5,
-    elevation: 5,
-  },
-  categoryHeader: {
-    textAlign: 'center',
-    marginVertical: 10
   }
 });
