@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 
 const toDoSchema = new mongoose.Schema({
 
-    toDo: {
+    value: {
+        type: String,
+        required: true
+    },
+    category: {
         type: String
     }
 });

@@ -11,7 +11,7 @@ const ToDoInput = props => {
 
     const [newToDo, setNewToDo] = useState('');
     const [errorSpecialCharacters, seterrorSpecialCharacters] = useState(false)
-    const [errorEmptyInput, seterrorEmptyInput] = useState(false)
+    const [errorEmptyInput, setErrorEmptyInput] = useState(false)
 
 
     let errorMessage;
@@ -22,25 +22,25 @@ const ToDoInput = props => {
         setNewToDo(enteredText);
       };
     };
-
-
-    const addToDoHandler = () => {
-      if(newToDo.length === 0){
-        seterrorEmptyInput(true);
-      }else{
-        props.onAddNewToDoHandler(newToDo);
-        setNewToDo('');
-        seterrorSpecialCharacters(false);
-        seterrorEmptyInput(false);
-      };
-    };
-    
-
     if(errorSpecialCharacters){
       Alert.alert('Specialteckenfel', 'Tyvärr, inga specialtecken tillåtna!', [{text: 'Okej', style: 'destructive', onPress: seterrorSpecialCharacters(false)}]);
     }else if(errorEmptyInput){
       errorMessage = <Text>Kan inte lägga in tom uppgift!</Text>;
     };
+    
+
+
+    const addToDoHandler = () => {
+      if(newToDo.length === 0){
+        setErrorEmptyInput(true);
+      }else{
+        props.onAddNewToDoHandler(newToDo);
+        setNewToDo('');
+        seterrorSpecialCharacters(false);
+        setErrorEmptyInput(false);
+      };
+    };
+  
     
 
   return (
@@ -60,14 +60,14 @@ const ToDoInput = props => {
                 props.onCancel();
                 setNewToDo('');
                 seterrorSpecialCharacters(false)
-                seterrorEmptyInput(false)
+                setErrorEmptyInput(false)
                 }}/>
             </View>
             <View style={styles.button}>
               <Button title='rensa' color='#E7E214' onPress={() => {
                 setNewToDo('')
                 seterrorSpecialCharacters(false)
-                seterrorEmptyInput(false)
+                setErrorEmptyInput(false)
                 }}/>
             </View>
             <View style={styles.button}>
@@ -106,5 +106,6 @@ const styles = StyleSheet.create({
       width: '30%'
     }
   });
+  
 
 export default ToDoInput
