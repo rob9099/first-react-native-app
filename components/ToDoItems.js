@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {View, Text, StyleSheet, TouchableOpacity, Button} from 'react-native'
 
 
@@ -47,13 +47,5 @@ const styles = StyleSheet.create({
   });
 
 
-
-  //const [itemCategory, setItemCategory] = useState('');
-
-    /*useEffect(() => {
-    setItemCategory(props.category);
-  }, []);*/
-
-  
 
 export default ToDoItems

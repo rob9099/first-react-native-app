@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Button, FlatList, TouchableWithoutFeedback, Keyboard} from "react-native";
+import { StyleSheet, View, Button, FlatList, TouchableWithoutFeedback, Keyboard, ScrollView} from "react-native";
 import ToDoItems from "./components/ToDoItems";
 import ToDoInput from "./components/ToDoInput";
 import TitleHeader from "./components/CategoryHeader";
@@ -123,17 +123,33 @@ export default function App() {
         <Search onSearchHandler={searchHandler}/>
         <ToDoInput visible={addButton} onAddNewToDoHandler={addNewToDoHandler} onCancel={cancelButtonHandler}/>
         <TitleHeader>Att göra</TitleHeader>
-        <FlatList data={toDoList} keyExtractor={(item, key) => item._id} renderItem={toDoItem => <ToDoItems title={toDoItem.item} onDelete={deleteToDoItemHandler} onTransferCategoryHandler={ props => {
-          transferCategoryHandler(props);
-          }} />}/>
+        <FlatList data={toDoList} keyExtractor={(item, key) => item._id} renderItem={toDoItem =>
+          <ToDoItems
+            title={toDoItem.item}
+            onDelete={deleteToDoItemHandler}
+            onTransferCategoryHandler={ props => {
+              transferCategoryHandler(props);
+            }}
+          />
+        }/>
         <TitleHeader>Pågående</TitleHeader>
-        <FlatList data={inProgressList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem => <ToDoItems title={inProgressItem.item} onDelete={deleteToDoItemHandler} onTransferCategoryHandler={ props => {
-          transferCategoryHandler(props);
-          }}/>}/>
+        <FlatList data={inProgressList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem =>
+          <ToDoItems
+            title={inProgressItem.item}
+            onDelete={deleteToDoItemHandler}
+            onTransferCategoryHandler={ props => {
+              transferCategoryHandler(props);
+            }}
+          />
+        }/>
         <TitleHeader>Klart</TitleHeader>
-        <FlatList data={doneList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem => <ToDoItems title={inProgressItem.item} onDelete={deleteToDoItemHandler}/>}/>
+        <FlatList data={doneList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem =>
+          <ToDoItems
+            title={inProgressItem.item}
+            onDelete={deleteToDoItemHandler}/>
+        }/>
       </View>
-    
+      
   );
 }
 
