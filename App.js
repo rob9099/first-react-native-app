@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Button, FlatList, Text, TextInput, Alert } from "react-native";
+import { StyleSheet, View, Button, FlatList, Text, TouchableWithoutFeedback, Keyboard} from "react-native";
 import ToDoItems from "./components/ToDoItems";
 import ToDoInput from "./components/ToDoInput";
+import Search from "./components/Search";
 import axios from "axios";
 
 
@@ -17,8 +18,6 @@ export default function App() {
   const [inProgressList, setInProgressList] = useState([]);
   const [doneList, setDoneList] = useState([]);
   const [addButton, setaddButton] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [errorSpecialCharacters, setErrorSpecialCharacters] = useState(false);
 
   
 
@@ -87,38 +86,20 @@ export default function App() {
     }
 
     axios.patch('http://192.168.1.42:5000/changeCategory', {_id: toDoItem._id, category: category})
-    .then ((response) => {
-      console.log(response)
-      setToDoList([]), setInProgressList([]), setDoneList([])
-      getToDoItems()
-    })
-    .catch (function (error){
-      console.log(error)
-    })
+      .then ((response) => {
+        console.log(response)
+        setToDoList([]), setInProgressList([]), setDoneList([])
+        getToDoItems()
+      })
+      .catch (function (error){
+        console.log(error)
+      })
   }
 
 
-
-  const searchTermHandler = searchTerm => {
-    if(searchTerm.match(/[|\\/~^:,;?!&%$@*+]/)){
-      setErrorSpecialCharacters(true);
-    }else{
-      setSearchTerm(searchTerm);
-      searchDatabase(searchTerm);
-    };
-  }
-  if(errorSpecialCharacters){
-    Alert.alert('Specialteckenfel', 'Tyvärr, inga specialtecken tillåtna!', [{text: 'Okej', style: 'destructive', onPress: setErrorSpecialCharacters(false)}]);
-  }
-
-
-
-  const searchDatabase = searchTerm => {
-    axios.post('http://192.168.1.42:5000/search', {searchTerm: searchTerm})
-    .then ((response) => {
-      console.log(response.data)
-      setToDoList([]), setInProgressList([]), setDoneList([])
-      response.data.map((item) => {
+  const searchHandler = props => {
+    setToDoList([]), setInProgressList([]), setDoneList([])
+      props.map((item) => {
         if(item.category == 'toDo'){
           setToDoList(currentArray => [...currentArray, item])
         }else if(item.category == 'inProgress'){
@@ -127,41 +108,37 @@ export default function App() {
           setDoneList(currentArray => [...currentArray, item])
         }
       })
-    })
-    .catch (function (error){
-      console.log(error)
-    })
   }
 
-
-
+{/*<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>*/}
+{/*</TouchableWithoutFeedback>*/}
 
 
   
   return (
-    <View style={styles.screen}>
-      <Button title='Tryck här för att lägga till!' onPress={() => setaddButton(true)}/>
-      <View style={styles.searchContainer}>
-        <TextInput style={styles.search} placeholder='sök...' onChangeText={searchTermHandler} value={searchTerm}/>
+    
+      <View style={styles.screen}>
+        <Button title='Tryck här för att lägga till!' onPress={() => setaddButton(true)}/>
+        <Search onSearchHandler={searchHandler}/>
+        <ToDoInput visible={addButton} onAddNewToDoHandler={addNewToDoHandler} onCancel={cancelButtonHandler}/>
+        <View style={styles.categoryHeaderContainer}>
+          <Text style={styles.categoryHeader}>Att göra</Text>
+        </View>
+        <FlatList data={toDoList} keyExtractor={(item, key) => item._id} renderItem={toDoItem => <ToDoItems title={toDoItem.item} onDelete={deleteToDoItemHandler} onTransferCategoryHandler={ props => {
+          transferCategoryHandler(props);
+          }} />}/>
+        <View style={styles.categoryHeaderContainer}>
+          <Text style={styles.categoryHeader}>Pågående</Text>
+        </View>
+        <FlatList data={inProgressList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem => <ToDoItems title={inProgressItem.item} onDelete={deleteToDoItemHandler} onTransferCategoryHandler={ props => {
+          transferCategoryHandler(props);
+          }}/>}/>
+        <View style={styles.categoryHeaderContainer}>
+          <Text style={styles.categoryHeader}>Klart</Text>
+        </View>
+        <FlatList data={doneList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem => <ToDoItems title={inProgressItem.item} onDelete={deleteToDoItemHandler}/>}/>
       </View>
-      <ToDoInput visible={addButton} onAddNewToDoHandler={addNewToDoHandler} onCancel={cancelButtonHandler}/>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>Att göra</Text>
-      </View>
-      <FlatList data={toDoList} keyExtractor={(item, key) => item._id} renderItem={toDoItem => <ToDoItems title={toDoItem.item} onDelete={deleteToDoItemHandler} onTransferCategoryHandler={ props => {
-        transferCategoryHandler(props);
-        }} />}/>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>Pågående</Text>
-      </View>
-      <FlatList data={inProgressList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem => <ToDoItems title={inProgressItem.item} onDelete={deleteToDoItemHandler} onTransferCategoryHandler={ props => {
-        transferCategoryHandler(props);
-        }}/>}/>
-      <View style={styles.titleContainer}>
-        <Text style={styles.title}>Klart</Text>
-      </View>
-      <FlatList data={doneList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem => <ToDoItems title={inProgressItem.item} onDelete={deleteToDoItemHandler}/>}/>
-    </View>
+    
   );
 }
 
@@ -182,14 +159,14 @@ const styles = StyleSheet.create({
     margin: 10,
     paddingHorizontal: 5
   },
-  titleContainer: {
+  categoryTitleContainer: {
     shadowColor: 'black',
     shadowOffset: {width: 0, height: 2},
     shadowRadius: 50,
     shadowOpacity: 0.5,
     elevation: 5,
   },
-  title: {
+  categoryHeader: {
     textAlign: 'center',
     marginVertical: 10
   }
