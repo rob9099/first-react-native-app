@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, View, Text} from "react-native";
 
 
-const TitleHeader = props => {
+const CategoryHeader = props => {
   return (
     <View style={styles.categoryHeaderContainer}>
         <Text style={styles.categoryHeader}>{props.children}</Text>
@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default TitleHeader
+export default CategoryHeader

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Button, FlatList, TouchableWithoutFeedback, Keyboard, ScrollView} from "react-native";
+import { StyleSheet, View, Button, FlatList, TouchableWithoutFeedback, Keyboard, ScrollView, LogBox} from "react-native";
 import ToDoItems from "./components/ToDoItems";
 import ToDoInput from "./components/ToDoInput";
-import TitleHeader from "./components/CategoryHeader";
+import CategoryHeader from "./components/CategoryHeader";
 import Search from "./components/Search";
 import axios from "axios";
 
@@ -12,6 +12,7 @@ export default function App() {
   useEffect(() => {
     setToDoList([]), setInProgressList([]), setDoneList([])
     getToDoItems();
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
   },[]);
   
 
@@ -122,34 +123,36 @@ export default function App() {
         <Button title='Tryck här för att lägga till!' onPress={() => setaddButton(true)}/>
         <Search onSearchHandler={searchHandler}/>
         <ToDoInput visible={addButton} onAddNewToDoHandler={addNewToDoHandler} onCancel={cancelButtonHandler}/>
-        <TitleHeader>Att göra</TitleHeader>
-        <FlatList data={toDoList} keyExtractor={(item, key) => item._id} renderItem={toDoItem =>
-          <ToDoItems
-            title={toDoItem.item}
-            onDelete={deleteToDoItemHandler}
-            onTransferCategoryHandler={ props => {
-              transferCategoryHandler(props);
-            }}
-          />
-        }/>
-        <TitleHeader>Pågående</TitleHeader>
-        <FlatList data={inProgressList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem =>
-          <ToDoItems
-            title={inProgressItem.item}
-            onDelete={deleteToDoItemHandler}
-            onTransferCategoryHandler={ props => {
-              transferCategoryHandler(props);
-            }}
-          />
-        }/>
-        <TitleHeader>Klart</TitleHeader>
-        <FlatList data={doneList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem =>
-          <ToDoItems
-            title={inProgressItem.item}
-            onDelete={deleteToDoItemHandler}/>
-        }/>
+        <ScrollView>
+          <CategoryHeader>Att göra</CategoryHeader>
+          <FlatList data={toDoList} keyExtractor={(item, key) => item._id} renderItem={toDoItem =>
+            <ToDoItems
+              title={toDoItem.item}
+              onDelete={deleteToDoItemHandler}
+              onTransferCategoryHandler={ props => {
+                transferCategoryHandler(props);
+              }}
+            />
+          }/>
+          <CategoryHeader>Pågående</CategoryHeader>
+          <FlatList data={inProgressList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem =>
+            <ToDoItems
+              title={inProgressItem.item}
+              onDelete={deleteToDoItemHandler}
+              onTransferCategoryHandler={ props => {
+                transferCategoryHandler(props);
+              }}
+            />
+          }/>
+          <CategoryHeader>Klart</CategoryHeader>
+          <FlatList data={doneList} keyExtractor={(item, key) => item._id} renderItem={doneItem =>
+            <ToDoItems
+              title={doneItem.item}
+              onDelete={deleteToDoItemHandler}/>
+          }/>
+        </ScrollView>
       </View>
-      
+
   );
 }
 
