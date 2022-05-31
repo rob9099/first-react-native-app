@@ -12,7 +12,7 @@ export default function App() {
   useEffect(() => {
     setToDoList([]), setInProgressList([]), setDoneList([])
     getToDoItems();
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+    
   },[]);
   
 
@@ -115,6 +115,28 @@ export default function App() {
 {/*<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>*/}
 {/*</TouchableWithoutFeedback>*/}
 
+const Footer = () => {
+  return(
+  <View>
+  <CategoryHeader>Klart</CategoryHeader>
+  <FlatList data={doneList} keyExtractor={(item, key) => item._id} renderItem={doneItem =>
+    <ToDoItems
+      title={doneItem.item}
+      onDelete={deleteToDoItemHandler}/>
+  }/>
+  </View>
+)}
+
+/*<CategoryHeader>Att göra</CategoryHeader>
+<FlatList data={toDoList} keyExtractor={(item, key) => item._id} renderItem={toDoItem =>
+  <ToDoItems
+    title={toDoItem.item}
+    onDelete={deleteToDoItemHandler}
+    onTransferCategoryHandler={ props => {
+      transferCategoryHandler(props);
+    }}
+  />
+}/>*/
 
   
   return (
@@ -123,19 +145,10 @@ export default function App() {
         <Button title='Tryck här för att lägga till!' onPress={() => setaddButton(true)}/>
         <Search onSearchHandler={searchHandler}/>
         <ToDoInput visible={addButton} onAddNewToDoHandler={addNewToDoHandler} onCancel={cancelButtonHandler}/>
-        <ScrollView>
-          <CategoryHeader>Att göra</CategoryHeader>
-          <FlatList data={toDoList} keyExtractor={(item, key) => item._id} renderItem={toDoItem =>
-            <ToDoItems
-              title={toDoItem.item}
-              onDelete={deleteToDoItemHandler}
-              onTransferCategoryHandler={ props => {
-                transferCategoryHandler(props);
-              }}
-            />
-          }/>
+        
+
           <CategoryHeader>Pågående</CategoryHeader>
-          <FlatList data={inProgressList} keyExtractor={(item, key) => item._id} renderItem={inProgressItem =>
+          <FlatList data={inProgressList} keyExtractor={(item, key) => item._id} ListFooterComponent={<Footer/>} renderItem={inProgressItem =>
             <ToDoItems
               title={inProgressItem.item}
               onDelete={deleteToDoItemHandler}
@@ -144,15 +157,10 @@ export default function App() {
               }}
             />
           }/>
-          <CategoryHeader>Klart</CategoryHeader>
-          <FlatList data={doneList} keyExtractor={(item, key) => item._id} renderItem={doneItem =>
-            <ToDoItems
-              title={doneItem.item}
-              onDelete={deleteToDoItemHandler}/>
-          }/>
-        </ScrollView>
+
+        
       </View>
-      
+
   );
 }
 
