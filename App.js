@@ -152,7 +152,7 @@ export default function App() {
           }/>
         </ScrollView>
       </View>
-
+      
   );
 }
 
