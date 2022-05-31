@@ -51,10 +51,11 @@ const Search = props => {
 
 const styles = StyleSheet.create({
     searchContainer: {
-      alignItems: "center"
+      alignItems: "center",
+      width: '60%',
     },
     search: {
-      width: '60%',
+      width: '100%',
       borderColor: 'red',
       borderWidth: 1,
       margin: 10,

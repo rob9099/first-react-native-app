@@ -31,7 +31,7 @@ const ToDoItems = props => {
 const styles = StyleSheet.create({
   listItemContainer:{
     flexDirection: 'row',
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-evenly',
   },  
   listItem: {
     width: '70%',

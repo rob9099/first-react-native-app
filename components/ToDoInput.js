@@ -45,7 +45,7 @@ const ToDoInput = props => {
 
   return (
     <Modal visible={props.visible} animationType='slide'>
-      {/*<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>*/}
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.inputContainer}>
           <TextInput
               placeholder="Att göra"
@@ -75,7 +75,7 @@ const ToDoInput = props => {
             </View>
           </View>
         </View>
-      {/*</TouchableWithoutFeedback>*/}
+      </TouchableWithoutFeedback>
     </Modal>
   )
 }

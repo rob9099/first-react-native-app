@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Button, FlatList, TouchableWithoutFeedback, Keyboard, ScrollView, LogBox} from "react-native";
+import Header from "./components/Header";
 import ToDoItems from "./components/ToDoItems";
 import ToDoInput from "./components/ToDoInput";
 import CategoryHeader from "./components/CategoryHeader";
 import Search from "./components/Search";
 import axios from "axios";
+
 
 
 export default function App() {
@@ -21,7 +23,9 @@ export default function App() {
   const [doneList, setDoneList] = useState([]);
   const [addButton, setaddButton] = useState(false);
 
-  
+
+
+
 
   const getToDoItems = () => {
   
@@ -112,14 +116,13 @@ export default function App() {
       })
   }
 
-{/*<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>*/}
-{/*</TouchableWithoutFeedback>*/}
 
 
   
   return (
-    
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.screen}>
+        <Header />
         <Button title='Tryck här för att lägga till!' onPress={() => setaddButton(true)}/>
         <Search onSearchHandler={searchHandler}/>
         <ToDoInput visible={addButton} onAddNewToDoHandler={addNewToDoHandler} onCancel={cancelButtonHandler}/>
@@ -152,7 +155,7 @@ export default function App() {
           }/>
         </ScrollView>
       </View>
-      
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -161,6 +164,8 @@ export default function App() {
 
 const styles = StyleSheet.create({
   screen: {
-    padding: 50
+    padding: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
