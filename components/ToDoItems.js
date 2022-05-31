@@ -12,8 +12,8 @@ const ToDoItems = props => {
           props.onTransferCategoryHandler(props.title)
         }else{
           props.onDelete(props.title._id)
-        }
-      }}>
+      }
+    }}>
       <View style={styles.listItemContainer}>
         <View style={styles.listItem}>
             <Text>{props.title.value}</Text>
