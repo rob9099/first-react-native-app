@@ -25,7 +25,7 @@ const Search = props => {
     
     
       const searchDatabase = searchTerm => {
-        axios.post('http://192.168.1.42:5000/search', {searchTerm: searchTerm})
+        axios.post('http://192.168.155.78:5000/search', {searchTerm: searchTerm})
         .then ((response) => {
           props.onSearchHandler(response.data)
           if(response.data.length == 0){

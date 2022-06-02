@@ -13,7 +13,7 @@ const CategoryHeader = props => {
 
 const styles = StyleSheet.create({
     categoryHeaderContainer: {
-      
+      borderWidth: 0.1,
       shadowColor: 'black',
       shadowOffset: {width: 0, height: 2},
       shadowRadius: 50,

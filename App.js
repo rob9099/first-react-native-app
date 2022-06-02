@@ -30,7 +30,7 @@ export default function App() {
 
   const getToDoItems = () => {
   
-    fetch("http://192.168.1.42:5000/getToDoItems")
+    fetch("http://192.168.155.78:5000/getToDoItems")
       .then(response => response.json())
       .then((responseJson) => {
         responseJson.map((item) => {
@@ -52,7 +52,7 @@ export default function App() {
   
   const addNewToDoHandler = props => {
     setaddButton(false);
-    axios.post('http://192.168.1.42:5000/newToDo', {value: props})
+    axios.post('http://192.168.155.78:5000/newToDo', {value: props})
     .then ((response) => {
       console.log(response)
       setToDoList([]), setInProgressList([]), setDoneList([])
@@ -66,7 +66,7 @@ export default function App() {
 
 
   const deleteToDoItemHandler = toDoKey => {
-    axios.post('http://192.168.1.42:5000/deleteOneToDo', {_id: toDoKey})
+    axios.post('http://192.168.155.78:5000/deleteOneToDo', {_id: toDoKey})
     .then ((response) => {
       console.log(response)
       setToDoList([]), setInProgressList([]), setDoneList([])
@@ -92,7 +92,7 @@ export default function App() {
       category = 'done'
     }
 
-    axios.patch('http://192.168.1.42:5000/changeCategory', {_id: toDoItem._id, category: category})
+    axios.patch('http://192.168.155.78:5000/changeCategory', {_id: toDoItem._id, category: category})
       .then ((response) => {
         console.log(response)
         setToDoList([]), setInProgressList([]), setDoneList([])
