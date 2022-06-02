@@ -14,9 +14,10 @@ const Header = () => {
 const styles = StyleSheet.create({
   imageContainer: {
     height: '10%',
-    width: '70%',
+    width: '90%',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    overflow: 'hidden'
   },
   image: {
     justifyContent: 'center',

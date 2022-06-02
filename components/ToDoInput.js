@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import {View, TextInput, StyleSheet, Button, Modal, TouchableWithoutFeedback, Keyboard, Text, Alert} from 'react-native'
+import CustomButton from './CustomButton';
 
 
 
@@ -54,24 +55,24 @@ const ToDoInput = props => {
               value={newToDo}
           />
           {errorMessage}
-          <View style={styles.buttonContainer}>
-            <View style={styles.button}>
-              <Button title='avbryt' color='#b40000' onPress={() => {
+          <View style={styles.buttonAllContainer}>
+            <View style={styles.buttonContainer}>
+              <CustomButton onPress={() => {
                 props.onCancel();
                 setNewToDo('');
                 seterrorSpecialCharacters(false)
                 setErrorEmptyInput(false)
-                }}/>
+                }}>Avbryt</CustomButton>
             </View>
-            <View style={styles.button}>
-              <Button title='rensa' color='#E7E214' onPress={() => {
+            <View style={styles.buttonContainer}>
+              <CustomButton style={styles.clearButton} onPress={() => {
                 setNewToDo('')
                 seterrorSpecialCharacters(false)
                 setErrorEmptyInput(false)
-                }}/>
+                }}>Rensa</CustomButton>
             </View>
-            <View style={styles.button}>
-              <Button title="lägg till" onPress={addToDoHandler}/>
+            <View style={styles.buttonContainer}>
+              <CustomButton style={styles.addButton} onPress={addToDoHandler}>Lägg till</CustomButton>
             </View>
           </View>
         </View>
@@ -97,13 +98,19 @@ const styles = StyleSheet.create({
       padding: 5,
       marginBottom: 10
     },
-    buttonContainer: {
+    buttonAllContainer: {
       flexDirection: 'row',
       width: '70%',
       justifyContent: 'space-between'
     },
-    button: {
+    buttonContainer: {
       width: '30%'
+    },
+    clearButton: {
+      backgroundColor: '#E7E214'
+    },
+    addButton: {
+      backgroundColor: '#194D33'
     }
   });
   

@@ -1,5 +1,6 @@
 import React from "react";
 import {View, Text, StyleSheet, TouchableOpacity, Button} from 'react-native'
+import CustomButton from "./CustomButton";
 
 
 
@@ -19,7 +20,7 @@ const ToDoItems = props => {
             <Text>{props.title.value}</Text>
         </View>
         <View style={styles.buttonContainer}>
-          <Button title='radera' color='#b40000' onPress={() => props.onDelete(props.title._id)}/>
+          <CustomButton onPress={() => props.onDelete(props.title._id)}>Radera</CustomButton>
         </View>
       </View>
     </TouchableOpacity>
@@ -30,6 +31,7 @@ const ToDoItems = props => {
 
 const styles = StyleSheet.create({
   listItemContainer:{
+    marginLeft: 20,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
   },  

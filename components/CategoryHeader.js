@@ -13,11 +13,12 @@ const CategoryHeader = props => {
 
 const styles = StyleSheet.create({
     categoryHeaderContainer: {
+      
       shadowColor: 'black',
       shadowOffset: {width: 0, height: 2},
       shadowRadius: 50,
       shadowOpacity: 0.5,
-      elevation: 5,
+      elevation: 4,
     },
     categoryHeader: {
       textAlign: 'center',

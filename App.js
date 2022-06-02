@@ -6,6 +6,7 @@ import ToDoInput from "./components/ToDoInput";
 import CategoryHeader from "./components/CategoryHeader";
 import Search from "./components/Search";
 import axios from "axios";
+import CustomButton from "./components/CustomButton";
 
 
 
@@ -123,7 +124,7 @@ export default function App() {
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.screen}>
         <Header />
-        <Button title='Tryck här för att lägga till!' onPress={() => setaddButton(true)}/>
+        <CustomButton style={styles.button} onPress={() => setaddButton(true)}>Tryck här för att lägga till!</CustomButton>
         <Search onSearchHandler={searchHandler}/>
         <ToDoInput visible={addButton} onAddNewToDoHandler={addNewToDoHandler} onCancel={cancelButtonHandler}/>
         <ScrollView>
@@ -164,8 +165,11 @@ export default function App() {
 
 const styles = StyleSheet.create({
   screen: {
-    padding: 50,
+    padding: 30,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  button: {
+    backgroundColor: '#4655BD'
   }
 });
